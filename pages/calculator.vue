@@ -1,93 +1,52 @@
 <template>
     <div class="container mx-auto grid-cols-12 grid px-4 gap-10">
-        <div class="col-span-3">
-            <span class="text-lg font-bold text-center block mb-4">Legend</span>
-            <div class="flex flex-col gap-4 justify-between h-full">
-                <span>GPT-ALT max</span>
-                <span>INR max</span>
-                <span>BB (umol/L)</span>
-                <span>GOT-AST max</span>
-            </div>
-        </div>
-        <div class="col-span-3" id="day2">
-            <span class="text-lg font-bold text-center block mb-4">Day 2</span>
-            <div class="flex flex-col gap-4 justify-between h-full">
-                <input v-model="gpt2" type="number" minlength="1" maxlength="3" class="bg-black-200 rounded-sm py-2 px-2" name="gpt2" placeholder="GPT-ALT max">
-                <input v-model="inr2" type="number" minlength="1" maxlength="3" class="bg-black-200 rounded-sm py-2 px-2" name="inr2" placeholder="INR max">
-                <input v-model="bb2" type="number" minlength="1" maxlength="3" class="bg-black-200 rounded-sm py-2 px-2" name="bb2" placeholder="BB (umol/L)">
-                <input v-model="got2" type="number" minlength="1" maxlength="3" class="bg-black-200 rounded-sm py-2 px-2" name="got2" placeholder="GOT-AST max">
-                <button @click="calculate" class="bg-green-500 text-white rounded-sm py-3 px-4">Calculate!</button>
-                <div>score GPT-ALT: <span>{{ scoreGPTALT2 }}</span></div>
-                <div>score INR: <span>{{ scoreINR2 }}</span></div>
-                <div>score BB: <span>{{ scoreBB2 }}</span></div>
-                <div>score GOT-AST: <span>{{ scoreGOTAST2 }}</span></div>
-                <div>MEAF-GPT 2DPO: <span>{{ meafGPT2 }}</span></div>
-                <div>MEAF-GOT 2DPO: <span>{{ meafGOT2 }}</span></div>
-            </div>
-        </div>
+      <div class="col-span-12 flex gap-8">
+        <DayInput :day="2" :constants="constants2DPO" />
+        <DayInput :day="3" :constants="constants3DPO" />
+        <DayInput :day="4" :constants="constants4DPO" />
+        <DayInput :day="5" :constants="constants5DPO" />
+      </div>
     </div>
-</template>
-
-<script>
-export default {
-    data() {
-        return {
-            gpt2: null,
-            inr2: null,
-            bb2: null,
-            got2: null,
-            scoreGPTALT2: '',
-            scoreINR2: '',
-            scoreBB2: '',
-            scoreGOTAST2: '',
-            meafGPT2: '',
-            meafGOT2: ''
-        };
+  </template>
+  
+  <script>
+  import DayInput from '@/components/DayInput.vue';
+  
+  export default {
+    components: {
+      DayInput
     },
-    methods: {
-        calculate() {
-            const DPO2gptB = -2.0125491;
-            const DPO2gptD = 3.2831146;
-            const DPO2gptE = 549.5562336;
-            
-            const DPO2inrB = -5.0120686;
-            const DPO2inrD = 3.293744;
-            const DPO2inrE = 1.9530051;
-            
-            const DPO2bbB = -1.9272168;
-            const DPO2bbD = 3.3797542;
-            const DPO2bbE = 3.2702441;
-            
-            const DPO2gotB = -2.1489028;
-            const DPO2gotD = 3.2382656;
-            const DPO2gotE = 745.2758055;
-
-            const gpt2Score = this.calculateScore(this.gpt2, DPO2gptB, DPO2gptD, DPO2gptE);
-            this.scoreGPTALT2 = gpt2Score;
-            
-            const inr2Score = this.calculateScore(this.inr2, DPO2inrB, DPO2inrD, DPO2inrE);
-            this.scoreINR2 = inr2Score;
-            
-            const bb2Score = this.calculateScore(this.bb2, DPO2bbB, DPO2bbD, DPO2bbE);
-            this.scoreBB2 = bb2Score;
-            
-            const got2Score = this.calculateScore(this.got2, DPO2gotB, DPO2gotD, DPO2gotE);
-            this.scoreGOTAST2 = got2Score;
-            
-            this.meafGPT2 = parseFloat(this.scoreGPTALT2) + parseFloat(this.scoreINR2) + parseFloat(this.scoreBB2);
-            this.meafGOT2 = parseFloat(this.scoreINR2) + parseFloat(this.scoreBB2) + parseFloat(this.scoreGOTAST2);
+    data() {
+      return {
+        constants2DPO: {
+          gptB: -2.0125491, gptD: 3.2831146, gptE: 549.5562336,
+          inrB: -5.0120686, inrD: 3.293744, inrE: 1.9530051,
+          bbB: -1.9272168, bbD: 3.3797542, bbE: 3.2702441,
+          gotB: -2.1489028, gotD: 3.2382656, gotE: 745.2758055
         },
-        calculateScore(value, B, D, E) {
-            const score = D / (1 + Math.exp(B * (Math.log(value) - Math.log(E))));
-            return score.toFixed(3);
+        constants3DPO: {
+          gptB: -2.001, gptD: 3.287, gptE: 565.189,
+          inrB: -4.996, inrD: 3.294, inrE: 1.958,
+          bbB: -1.907, bbD: 3.414, bbE: 3.584,
+          gotB: -2.140, gotD: 3.241, gotE: 749.212
+        },
+        constants4DPO: {
+          gptB: -2.012, gptD: 3.284, gptE: 567.397,
+          inrB: -5.000, inrD: 3.292, inrE: 1.959,
+          bbB: -1.872, bbD: 3.504, bbE: 4.587,
+          gotB: -2.141, gotD: 3.239, gotE: 748.930
+        },
+        constants5DPO: {
+          gptB: -2.029, gptD: 3.286, gptE: 565.942,
+          inrB: -5.019, inrD: 3.288, inrE: 1.956,
+          bbB: -1.781, bbD: 3.609, bbE: 5.559,
+          gotB: -2.148, gotD: 3.243, gotE: 746.883
         }
+      };
     }
-};
-</script>
-
-<style scoped>
-.container {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-}
-</style>
+  };
+  </script>
+  
+  <style scoped>
+  /* Styles for the main view */
+  </style>
