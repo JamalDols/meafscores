@@ -1,75 +1,98 @@
-# Nuxt 3 Minimal Starter
+# Nuxt.js Medical Metrics Application
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+This project is a medical metrics application built with Nuxt.js. It allows users to input medical data for multiple post-operation days, calculate various scores, and visualize these scores using dynamic charts created with D3.js.
 
-## Setup
+## Features
 
-Make sure to install the dependencies:
+- **Day-Specific Input Forms**: Input forms for days 2, 3, 4, and 5 post-operation.
+- **Dynamic Calculations**: Calculates scores based on input values using specific mathematical formulas.
+- **Chart Visualization**: Visualizes the calculated scores using scatter plots generated with D3.js.
 
-```bash
-# npm
-npm install
+## Project Structure
 
-# pnpm
-pnpm install
+### Components
 
-# yarn
-yarn install
+- **DayInput.vue**: A reusable component for inputting and calculating medical data for a specific day.
+- **ScatterPlot.vue**: A component for rendering scatter plots using D3.js.
 
-# bun
-bun install
-```
+### Pages
 
-## Development Server
+- **index.vue**: The main page that includes `DayInput` components for days 2, 3, 4, and 5.
 
-Start the development server on `http://localhost:3000`:
+## Installation
 
-```bash
-# npm
-npm run dev
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/yourusername/medical-metrics-app.git
+   cd medical-metrics-app
+   ```
 
-# pnpm
-pnpm run dev
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-# yarn
-yarn dev
+3. **Run the development server**:
+   ```bash
+   npm run dev
+   ```
 
-# bun
-bun run dev
-```
+## Usage
 
-## Production
+### Inputting Data
 
-Build the application for production:
+For each day (2, 3, 4, 5), enter the following metrics:
 
-```bash
-# npm
-npm run build
+- GPT-ALT max
+- INR max
+- BB (umol/L)
+- GOT-AST max
 
-# pnpm
-pnpm run build
+Click the "Calculate!" button to compute the scores and visualize the results.
 
-# yarn
-yarn build
+### Viewing Results
 
-# bun
-bun run build
-```
+The application will display:
 
-Locally preview production build:
+- **Scores**:
+  - GPT-ALT score
+  - INR score
+  - BB score
+  - GOT-AST score
+- **MEAF Scores**:
+  - MEAF-GPT score
+  - MEAF-GOT score
 
-```bash
-# npm
-npm run preview
+The scatter plot will show the MEAF scores over the specified days.
 
-# pnpm
-pnpm run preview
+## Technical Details
 
-# yarn
-yarn preview
+### Calculations
 
-# bun
-bun run preview
-```
+The calculations for each metric are performed using the following formula:
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+\[ \text{Score} = \frac{D}{1 + \exp(B \cdot (\ln(\text{value}) - \ln(E)))} \]
+
+### Chart Rendering
+
+Charts are rendered using D3.js, which dynamically adjusts to the size of the container, providing a responsive visualization of the data.
+
+## Contributing
+
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature-branch`).
+3. Make your changes.
+4. Commit your changes (`git commit -m 'Add some feature'`).
+5. Push to the branch (`git push origin feature-branch`).
+6. Create a new Pull Request.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Acknowledgements
+
+- [Nuxt.js](https://nuxtjs.org/)
+- [D3.js](https://d3js.org/)
+
+---
