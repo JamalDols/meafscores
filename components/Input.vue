@@ -1,13 +1,30 @@
 <template>
-  <div>
-    <input :value="gpt" @input="$emit('update:gpt', $event.target.value)" type="number" minlength="1" maxlength="3" class="bg-black-200 rounded-sm py-2 px-2" :name="'gpt' + day" placeholder="GPT-ALT max">
-    <input :value="inr" @input="$emit('update:inr', $event.target.value)" type="number" minlength="1" maxlength="3" class="bg-black-200 rounded-sm py-2 px-2" :name="'inr' + day" placeholder="INR max">
-    <div class="flex items-center">
-      <input :value="bbValue" @input="updateBB($event.target.value)" type="number" minlength="1" maxlength="3" class="bg-black-200 rounded-sm py-2 px-2" :name="'bb' + day" :placeholder="bbPlaceholder">
-      <button :class="{'bg-blue-500 text-white': unit === 'umol/L', 'bg-gray-200 text-black': unit !== 'umol/L'}" @click="convertToUmol" class="rounded-sm py-1 px-2 ml-2">umol/L</button>
-      <button :class="{'bg-blue-500 text-white': unit === 'mg/dL', 'bg-gray-200 text-black': unit !== 'mg/dL'}" @click="convertToMgDl" class="rounded-sm py-1 px-2 ml-2">mg/dL</button>
+  <div class="flex flex-col gap-6">
+    <div class="flex flex-col">
+      <label class="font-medium text-sm">ALT max until day {{ day }}</label>
+      <input :value="gpt" @input="$emit('update:gpt', $event.target.value)" type="number" minlength="1" maxlength="3" class="bg-black-200 rounded-sm py-2 px-2" :name="'gpt' + day" placeholder="ALT max">
     </div>
-    <input :value="got" @input="$emit('update:got', $event.target.value)" type="number" minlength="1" maxlength="3" class="bg-black-200 rounded-sm py-2 px-2" :name="'got' + day" placeholder="GOT-AST max">
+    <div class="flex flex-col">
+      <label class="font-medium text-sm">INR max until day {{ day }}</label>
+      <input :value="inr" @input="$emit('update:inr', $event.target.value)" type="number" minlength="1" maxlength="3" class="bg-black-200 rounded-sm py-2 px-2" :name="'inr' + day" placeholder="INR max">
+    </div>
+
+    <div class="flex">
+        <div class="flex flex-col">
+          <label class="font-medium text-sm">Billirrubine day {{ day }}</label>
+          <input :value="bbValue" @input="updateBB($event.target.value)" type="number" minlength="1" maxlength="3" class="bg-black-200 rounded-sm py-2 px-2" :name="'bb' + day" :placeholder="bbPlaceholder">
+        </div>
+      <div>
+        <button :class="{'bg-blue-500 text-white': unit === 'mg/dL', 'bg-gray-200 text-black': unit !== 'mg/dL'}" @click="convertToMgDl" class="rounded-sm py-1 px-2 ml-2">mg/dL</button>
+        <button :class="{'bg-blue-500 text-white': unit === 'umol/L', 'bg-gray-200 text-black': unit !== 'umol/L'}" @click="convertToUmol" class="rounded-sm py-1 px-2 ml-2">umol/L</button>
+      </div>
+    </div>
+
+
+    <div class="flex flex-col">
+      <label class="font-medium text-sm">AST max until day {{ day }}</label>
+    <input :value="got" @input="$emit('update:got', $event.target.value)" type="number" minlength="1" maxlength="3" class="bg-black-200 rounded-sm py-2 px-2" :name="'got' + day" placeholder="AST max">
+    </div>
   </div>
 </template>
 

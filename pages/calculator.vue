@@ -1,7 +1,14 @@
 <template>
   <div class="container mx-auto grid-cols-12 grid px-4 gap-10">
     <div class="col-span-12 flex gap-8">
-      <DayInput v-for="day in days" :key="day" :day="day" :constants="constants['DPO' + day]" @update-data="updateData" :calculatedData="calculatedData[day]" />
+      <DayInput
+        v-for="day in days"
+        :key="day"
+        :day="day"
+        :constants="constants['DPO' + day]"
+        @update-data="updateData"
+        :calculatedData="calculatedData[day]"
+      />
     </div>
     <div class="col-span-12 flex flex-col items-center">
       <button @click="calculateAll" class="bg-green-500 text-white rounded-sm py-3 px-4 mb-4">Calculate!</button>
@@ -54,10 +61,10 @@ export default {
       },
       inputData: {},
       calculatedData: {
-        2: { scoreGPTALT: '', scoreINR: '', scoreBB: '', scoreGOTAST: '', meafGPT: '', meafGOT: '' },
-        3: { scoreGPTALT: '', scoreINR: '', scoreBB: '', scoreGOTAST: '', meafGPT: '', meafGOT: '' },
-        4: { scoreGPTALT: '', scoreINR: '', scoreBB: '', scoreGOTAST: '', meafGPT: '', meafGOT: '' },
-        5: { scoreGPTALT: '', scoreINR: '', scoreBB: '', scoreGOTAST: '', meafGPT: '', meafGOT: '' }
+        2: { scoreALT: '', scoreINR: '', scoreBB: '', scoreAST: '', meafALT: '', meafAST: '' },
+        3: { scoreALT: '', scoreINR: '', scoreBB: '', scoreAST: '', meafALT: '', meafAST: '' },
+        4: { scoreALT: '', scoreINR: '', scoreBB: '', scoreAST: '', meafALT: '', meafAST: '' },
+        5: { scoreALT: '', scoreINR: '', scoreBB: '', scoreAST: '', meafALT: '', meafAST: '' }
       },
       chartDataGPT: [],
       chartDataGOT: [],
@@ -86,20 +93,20 @@ export default {
           const bbScore = this.calculateScore(bb, constants.bbB, constants.bbD, constants.bbE);
           const gotScore = this.calculateScore(got, constants.gotB, constants.gotD, constants.gotE);
 
-          const meafGPT = parseFloat(gptScore) + parseFloat(inrScore) + parseFloat(bbScore);
-          const meafGOT = parseFloat(inrScore) + parseFloat(bbScore) + parseFloat(gotScore);
+          const meafALT = parseFloat(gptScore) + parseFloat(inrScore) + parseFloat(bbScore);
+          const meafAST = parseFloat(inrScore) + parseFloat(bbScore) + parseFloat(gotScore);
 
           this.calculatedData[day] = {
-            scoreGPTALT: gptScore,
+            scoreALT: gptScore,
             scoreINR: inrScore,
             scoreBB: bbScore,
-            scoreGOTAST: gotScore,
-            meafGPT,
-            meafGOT
+            scoreAST: gotScore,
+            meafALT,
+            meafAST
           };
 
-          this.chartDataGPT.push({ x: day, y: meafGPT });
-          this.chartDataGOT.push({ x: day, y: meafGOT });
+          this.chartDataGPT.push({ x: day, y: meafALT });
+          this.chartDataGOT.push({ x: day, y: meafAST });
         } else {
           this.error = `Faltan datos para el día ${day}`;
         }

@@ -13,12 +13,12 @@
         :got="got"
         @update:got="updateField('got', $event)"
       />
-      <div>score GPT-ALT: <span>{{ scoreGPTALT }}</span></div>
+      <div>score ALT: <span>{{ scoreALT }}</span></div>
       <div>score INR: <span>{{ scoreINR }}</span></div>
       <div>score BB: <span>{{ scoreBB }}</span></div>
-      <div>score GOT-AST: <span>{{ scoreGOTAST }}</span></div>
-      <div>MEAF-GPT {{ day }}DPO: <span>{{ meafGPT }}</span></div>
-      <div>MEAF-GOT {{ day }}DPO: <span>{{ meafGOT }}</span></div>
+      <div>score AST: <span>{{ scoreAST }}</span></div>
+      <div>MEAF-ALT {{ day }}DPO: <span>{{ meafALT }}</span></div>
+      <div>MEAF-AST {{ day }}DPO: <span>{{ meafAST }}</span></div>
     </div>
   </div>
 </template>
@@ -42,12 +42,12 @@ export default {
     calculatedData: {
       type: Object,
       default: () => ({
-        scoreGPTALT: '',
+        scoreALT: '',
         scoreINR: '',
         scoreBB: '',
-        scoreGOTAST: '',
-        meafGPT: '',
-        meafGOT: ''
+        scoreAST: '',
+        meafALT: '',
+        meafAST: ''
       })
     }
   },
@@ -57,23 +57,23 @@ export default {
       inr: '',
       bb: '',
       got: '',
-      scoreGPTALT: '',
+      scoreALT: '',
       scoreINR: '',
       scoreBB: '',
-      scoreGOTAST: '',
-      meafGPT: '',
-      meafGOT: ''
+      scoreAST: '',
+      meafALT: '',
+      meafAST: ''
     };
   },
   watch: {
     calculatedData: {
       handler(newVal) {
-        this.scoreGPTALT = newVal.scoreGPTALT;
+        this.scoreALT = newVal.scoreALT;
         this.scoreINR = newVal.scoreINR;
         this.scoreBB = newVal.scoreBB;
-        this.scoreGOTAST = newVal.scoreGOTAST;
-        this.meafGPT = newVal.meafGPT;
-        this.meafGOT = newVal.meafGOT;
+        this.scoreAST = newVal.scoreAST;
+        this.meafALT = newVal.meafALT;
+        this.meafAST = newVal.meafAST;
       },
       deep: true,
       immediate: true
