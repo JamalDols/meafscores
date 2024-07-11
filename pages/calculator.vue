@@ -1,52 +1,131 @@
 <template>
-    <div class="container mx-auto grid-cols-12 grid px-4 gap-10">
-      <div class="col-span-12 flex gap-8">
-        <DayInput :day="2" :constants="constants2DPO" />
-        <DayInput :day="3" :constants="constants3DPO" />
-        <DayInput :day="4" :constants="constants4DPO" />
-        <DayInput :day="5" :constants="constants5DPO" />
+  <div class="container mx-auto grid-cols-12 grid px-4 gap-10">
+    <div class="col-span-12 flex gap-8">
+      <DayInput v-for="day in days" :key="day" :day="day" :constants="constants['DPO' + day]" @update-data="updateData" :calculatedData="calculatedData[day]" />
+    </div>
+    <div class="col-span-12 flex flex-col items-center">
+      <button @click="calculateAll" class="bg-green-500 text-white rounded-sm py-3 px-4 mb-4">Calculate!</button>
+      <div v-if="error" class="text-red-500">{{ error }}</div>
+      <div class="chart-container">
+        <ScatterPlot :data="chartDataGPT" title="MEAF-GPT" />
+        <ScatterPlot :data="chartDataGOT" title="MEAF-GOT" />
       </div>
     </div>
-  </template>
-  
-  <script>
-  import DayInput from '@/components/DayInput.vue';
-  
-  export default {
-    components: {
-      DayInput
-    },
-    data() {
-      return {
-        constants2DPO: {
+  </div>
+</template>
+
+<script>
+import DayInput from '@/components/DayInput.vue';
+import ScatterPlot from '@/components/ScatterPlot.vue';
+
+export default {
+  components: {
+    DayInput,
+    ScatterPlot
+  },
+  data() {
+    return {
+      days: [2, 3, 4, 5],
+      constants: {
+        DPO2: {
           gptB: -2.0125491, gptD: 3.2831146, gptE: 549.5562336,
           inrB: -5.0120686, inrD: 3.293744, inrE: 1.9530051,
           bbB: -1.9272168, bbD: 3.3797542, bbE: 3.2702441,
           gotB: -2.1489028, gotD: 3.2382656, gotE: 745.2758055
         },
-        constants3DPO: {
+        DPO3: {
           gptB: -2.001, gptD: 3.287, gptE: 565.189,
           inrB: -4.996, inrD: 3.294, inrE: 1.958,
           bbB: -1.907, bbD: 3.414, bbE: 3.584,
           gotB: -2.140, gotD: 3.241, gotE: 749.212
         },
-        constants4DPO: {
+        DPO4: {
           gptB: -2.012, gptD: 3.284, gptE: 567.397,
           inrB: -5.000, inrD: 3.292, inrE: 1.959,
           bbB: -1.872, bbD: 3.504, bbE: 4.587,
           gotB: -2.141, gotD: 3.239, gotE: 748.930
         },
-        constants5DPO: {
+        DPO5: {
           gptB: -2.029, gptD: 3.286, gptE: 565.942,
           inrB: -5.019, inrD: 3.288, inrE: 1.956,
           bbB: -1.781, bbD: 3.609, bbE: 5.559,
           gotB: -2.148, gotD: 3.243, gotE: 746.883
         }
-      };
+      },
+      inputData: {},
+      calculatedData: {
+        2: { scoreGPTALT: '', scoreINR: '', scoreBB: '', scoreGOTAST: '', meafGPT: '', meafGOT: '' },
+        3: { scoreGPTALT: '', scoreINR: '', scoreBB: '', scoreGOTAST: '', meafGPT: '', meafGOT: '' },
+        4: { scoreGPTALT: '', scoreINR: '', scoreBB: '', scoreGOTAST: '', meafGPT: '', meafGOT: '' },
+        5: { scoreGPTALT: '', scoreINR: '', scoreBB: '', scoreGOTAST: '', meafGPT: '', meafGOT: '' }
+      },
+      chartDataGPT: [],
+      chartDataGOT: [],
+      error: ''
+    };
+  },
+  methods: {
+    updateData({ day, field, value }) {
+      if (!this.inputData[day]) {
+        this.inputData[day] = {};
+      }
+      this.inputData[day][field] = value;
+    },
+    calculateAll() {
+      this.chartDataGPT = [];
+      this.chartDataGOT = [];
+      this.error = '';
+
+      this.days.forEach(day => {
+        const dayData = this.inputData[day];
+        if (dayData && this.isComplete(dayData)) {
+          const { gpt, inr, bb, got } = dayData;
+          const constants = this.constants['DPO' + day];
+          const gptScore = this.calculateScore(gpt, constants.gptB, constants.gptD, constants.gptE);
+          const inrScore = this.calculateScore(inr, constants.inrB, constants.inrD, constants.inrE);
+          const bbScore = this.calculateScore(bb, constants.bbB, constants.bbD, constants.bbE);
+          const gotScore = this.calculateScore(got, constants.gotB, constants.gotD, constants.gotE);
+
+          const meafGPT = parseFloat(gptScore) + parseFloat(inrScore) + parseFloat(bbScore);
+          const meafGOT = parseFloat(inrScore) + parseFloat(bbScore) + parseFloat(gotScore);
+
+          this.calculatedData[day] = {
+            scoreGPTALT: gptScore,
+            scoreINR: inrScore,
+            scoreBB: bbScore,
+            scoreGOTAST: gotScore,
+            meafGPT,
+            meafGOT
+          };
+
+          this.chartDataGPT.push({ x: day, y: meafGPT });
+          this.chartDataGOT.push({ x: day, y: meafGOT });
+        } else {
+          this.error = `Faltan datos para el día ${day}`;
+        }
+      });
+    },
+    isComplete(dayData) {
+      return dayData.gpt && dayData.inr && dayData.bb && dayData.got;
+    },
+    calculateScore(value, B, D, E) {
+      if (value === null || value === '' || isNaN(value)) {
+        return 0;
+      }
+      const score = D / (1 + Math.exp(B * (Math.log(value) - Math.log(E))));
+      return score.toFixed(3);
     }
-  };
-  </script>
-  
-  <style scoped>
-  /* Styles for the main view */
-  </style>
+  }
+};
+</script>
+
+<style scoped>
+.chart-container {
+  width: 100%;
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+</style>
