@@ -14,6 +14,10 @@ export default {
     title: {
       type: String,
       required: true
+    },
+    maxX: {
+      type: Number,
+      required: true
     }
   },
   mounted() {
@@ -46,16 +50,16 @@ export default {
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
       const x = d3.scaleLinear()
-        .domain([1, 5])
+        .domain([1, this.maxX])
         .range([0, width]);
 
       const y = d3.scaleLinear()
-        .domain([0, 10])
+        .domain([4.3, 5])
         .range([height, 0]);
 
       svg.append("g")
         .attr("transform", `translate(0,${height})`)
-        .call(d3.axisBottom(x).tickValues([1, 2, 3, 4, 5]).tickFormat(d3.format("d")));
+        .call(d3.axisBottom(x).tickValues(d3.range(1, this.maxX + 1)).tickFormat(d3.format("d")));
 
       svg.append("g")
         .call(d3.axisLeft(y));

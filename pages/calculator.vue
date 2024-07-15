@@ -1,21 +1,15 @@
 <template>
   <div class="container mx-auto grid-cols-12 grid px-4 gap-10">
     <div class="col-span-12 flex gap-8">
-      <DayInput
-        v-for="day in days"
-        :key="day"
-        :day="day"
-        :constants="constants['DPO' + day]"
-        @update-data="updateData"
-        :calculatedData="calculatedData[day]"
-      />
+      <DayInput v-for="day in visibleDays" :key="day" :day="day" :constants="constants['DPO' + day]" :calculatedData="calculatedData[day]" @update-data="updateData" />
     </div>
     <div class="col-span-12 flex flex-col items-center">
-      <button @click="calculateAll" class="bg-green-500 text-white rounded-sm py-3 px-4 mb-4 mt-10">Calculate!</button>
+      <button @click="addDay" class="bg-blue-500 text-white rounded-sm py-2 px-4 mb-4" :disabled="visibleDays.length >= 5">Add Day</button>
+      <button @click="calculateAll" class="bg-green-500 text-white rounded-sm py-3 px-4 mb-4">Calculate!</button>
       <div v-if="error" class="text-red-500">{{ error }}</div>
       <div class="chart-container">
-        <ScatterPlot :data="chartDataGPT" title="MEAF-GPT" />
-        <ScatterPlot :data="chartDataGOT" title="MEAF-GOT" />
+        <ScatterPlot :data="chartDataGPT" title="MEAF-GPT" :maxX="Math.max(...visibleDays)" />
+        <ScatterPlot :data="chartDataGOT" title="MEAF-GOT" :maxX="Math.max(...visibleDays)" />
       </div>
     </div>
   </div>
@@ -33,6 +27,7 @@ export default {
   data() {
     return {
       days: [2, 3, 4, 5],
+      visibleDays: [2], // Inicialmente solo mostrar el día 2
       constants: {
         DPO2: {
           gptB: -2.0125491, gptD: 3.2831146, gptE: 549.5562336,
@@ -72,6 +67,12 @@ export default {
     };
   },
   methods: {
+    addDay() {
+      if (this.visibleDays.length < 5) {
+        const nextDay = this.days[this.visibleDays.length];
+        this.visibleDays.push(nextDay);
+      }
+    },
     updateData({ day, field, value }) {
       if (!this.inputData[day]) {
         this.inputData[day] = {};
@@ -83,7 +84,7 @@ export default {
       this.chartDataGOT = [];
       this.error = '';
 
-      this.days.forEach(day => {
+      this.visibleDays.forEach(day => {
         const dayData = this.inputData[day];
         if (dayData && this.isComplete(dayData)) {
           const { gpt, inr, bb, got } = dayData;

@@ -1,7 +1,8 @@
 <template>
   <div :id="'day' + day" class=" basis-full border p-4 rounded-md">
-    <span class="text-lg font-bold text-center block mb-4">Day {{ day }}</span>
+    
     <div class="flex flex-col gap-4 justify-between h-full">
+      <span class="text-lg font-bold text-center block mb-4">Day {{ day }}</span>
       <Input
         :day="day"
         :gpt="gpt"
