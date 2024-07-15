@@ -11,12 +11,12 @@
 
     <div class="flex">
         <div class="flex flex-col">
-          <label class="font-medium text-sm">Billirrubine day {{ day }}</label>
+          <label class="font-medium text-sm">Billirrubin day {{ day }}</label>
           <input :value="bbValue" @input="updateBB($event.target.value)" type="number" minlength="1" maxlength="3" class="bg-black-200 rounded-sm py-2 px-2" :name="'bb' + day" :placeholder="bbPlaceholder">
         </div>
-      <div>
-        <button :class="{'bg-blue-500 text-white': unit === 'mg/dL', 'bg-gray-200 text-black': unit !== 'mg/dL'}" @click="convertToMgDl" class="rounded-sm py-1 px-2 ml-2">mg/dL</button>
-        <button :class="{'bg-blue-500 text-white': unit === 'umol/L', 'bg-gray-200 text-black': unit !== 'umol/L'}" @click="convertToUmol" class="rounded-sm py-1 px-2 ml-2">umol/L</button>
+      <div class="flex flex-col gap-1">
+        <button :class="{'text-xs duration-300  bg-blue-500 text-white': unit === 'mg/dL', 'text-xs duration-300  bg-gray-200 text-black': unit !== 'mg/dL'}" @click="convertToMgDl" class="rounded-sm py-1 px-2 ml-2">mg/dL</button>
+        <button :class="{'text-xs duration-300  bg-blue-500 text-white': unit === 'umol/L', 'text-xs duration-300  bg-gray-200 text-black': unit !== 'umol/L'}" @click="convertToUmol" class="rounded-sm py-1 px-2 ml-2">umol/L</button>
       </div>
     </div>
 
@@ -90,23 +90,7 @@ export default {
 </script>
 
 <style scoped>
-.bg-blue-500 {
-  background-color: #4299e1;
-}
-
-.text-white {
-  color: #ffffff;
-}
-
-.bg-gray-200 {
-  background-color: #edf2f7;
-}
-
-.text-black {
-  color: #000000;
-}
-
-button {
-  transition: background-color 0.3s ease, color 0.3s ease;
+input {
+  max-width: 120px;
 }
 </style>

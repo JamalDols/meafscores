@@ -11,7 +11,7 @@
       />
     </div>
     <div class="col-span-12 flex flex-col items-center">
-      <button @click="calculateAll" class="bg-green-500 text-white rounded-sm py-3 px-4 mb-4">Calculate!</button>
+      <button @click="calculateAll" class="bg-green-500 text-white rounded-sm py-3 px-4 mb-4 mt-10">Calculate!</button>
       <div v-if="error" class="text-red-500">{{ error }}</div>
       <div class="chart-container">
         <ScatterPlot :data="chartDataGPT" title="MEAF-GPT" />

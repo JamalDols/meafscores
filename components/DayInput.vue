@@ -1,5 +1,5 @@
 <template>
-  <div :id="'day' + day">
+  <div :id="'day' + day" class=" basis-full border p-4 rounded-md">
     <span class="text-lg font-bold text-center block mb-4">Day {{ day }}</span>
     <div class="flex flex-col gap-4 justify-between h-full">
       <Input
@@ -13,12 +13,14 @@
         :got="got"
         @update:got="updateField('got', $event)"
       />
-      <div>score ALT: <span>{{ scoreALT }}</span></div>
-      <div>score INR: <span>{{ scoreINR }}</span></div>
-      <div>score BB: <span>{{ scoreBB }}</span></div>
-      <div>score AST: <span>{{ scoreAST }}</span></div>
-      <div>MEAF-ALT {{ day }}DPO: <span>{{ meafALT }}</span></div>
-      <div>MEAF-AST {{ day }}DPO: <span>{{ meafAST }}</span></div>
+      <div class="flex flex-col gap-2">
+        <div>score ALT: <span>{{ scoreALT }}</span></div>
+        <div>score INR: <span>{{ scoreINR }}</span></div>
+        <div>score BB: <span>{{ scoreBB }}</span></div>
+        <div>score AST: <span>{{ scoreAST }}</span></div>
+        <div>MEAF-ALT {{ day }}DPO: <span>{{ meafALT }}</span></div>
+        <div>MEAF-AST {{ day }}DPO: <span>{{ meafAST }}</span></div>
+      </div>
     </div>
   </div>
 </template>
