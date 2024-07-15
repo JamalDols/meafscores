@@ -10,20 +10,23 @@
     </div>
 
     <div class="flex">
-        <div class="flex flex-col">
-          <label class="font-medium text-sm">Billirrubin day {{ day }}</label>
-          <input :value="bbValue" @input="updateBB($event.target.value)" type="number" minlength="1" maxlength="3" class="bg-black-200 rounded-sm py-2 px-2" :name="'bb' + day" :placeholder="bbPlaceholder">
-        </div>
+      <div class="flex flex-col">
+        <label class="font-medium text-sm">Billirrubin day {{ day }}</label>
+        <input :value="displayBB" @input="updateBB($event.target.value)" type="number" minlength="1" maxlength="5" class="bg-black-200 rounded-sm py-2 px-2" :name="'bb' + day" :placeholder="bbPlaceholder">
+      </div>
       <div class="flex flex-col gap-1">
-        <button :class="{'text-xs duration-300  bg-blue-500 text-white': unit === 'mg/dL', 'text-xs duration-300  bg-gray-200 text-black': unit !== 'mg/dL'}" @click="convertToMgDl" class="rounded-sm py-1 px-2 ml-2">mg/dL</button>
-        <button :class="{'text-xs duration-300  bg-blue-500 text-white': unit === 'umol/L', 'text-xs duration-300  bg-gray-200 text-black': unit !== 'umol/L'}" @click="convertToUmol" class="rounded-sm py-1 px-2 ml-2">umol/L</button>
+        <button :class="{'text-xs duration-300 bg-blue-500 text-white': unit === 'mg/dL', 'text-xs duration-300 bg-gray-200 text-black': unit !== 'mg/dL'}" @click="convertToMgDl" class="rounded-sm py-1 px-2 ml-2">mg/dL</button>
+        <button :class="{'text-xs duration-300 bg-blue-500 text-white': unit === 'umol/L', 'text-xs duration-300 bg-gray-200 text-black': unit !== 'umol/L'}" @click="convertToUmol" class="rounded-sm py-1 px-2 ml-2">umol/L</button>
       </div>
     </div>
 
-
     <div class="flex flex-col">
       <label class="font-medium text-sm">AST max until day {{ day }}</label>
-    <input :value="got" @input="$emit('update:got', $event.target.value)" type="number" minlength="1" maxlength="3" class="bg-black-200 rounded-sm py-2 px-2" :name="'got' + day" placeholder="AST max">
+      <input :value="got" @input="$emit('update:got', $event.target.value)" type="number" minlength="1" maxlength="3" class="bg-black-200 rounded-sm py-2 px-2" :name="'got' + day" placeholder="AST max">
+    </div>
+
+    <div class="flex flex-col">
+      <button @click="addDefaultValues" class="bg-green-500 text-white rounded-sm py-2 px-4 mt-4">Add Default Values</button>
     </div>
   </div>
 </template>
@@ -59,6 +62,11 @@ export default {
       unit: 'umol/L'
     };
   },
+  computed: {
+    displayBB() {
+      return this.unit === 'umol/L' ? (parseFloat(this.bbValue) * 17.1).toFixed(2) : this.bbValue.toFixed(2);
+    }
+  },
   methods: {
     convertToUmol() {
       if (this.unit === 'mg/dL') {
@@ -79,6 +87,13 @@ export default {
     updateBB(value) {
       this.bbValue = value;
       this.$emit('update:bb', value);
+    },
+    addDefaultValues() {
+      this.$emit('update:gpt', 123);
+      this.$emit('update:inr', 35);
+      this.bbValue = 50 / 17.1;
+      this.$emit('update:bb', this.bbValue.toFixed(2));
+      this.$emit('update:got', 158);
     }
   },
   watch: {
