@@ -1,7 +1,10 @@
 <template>
-  <div :id="'day' + day" class="basis-full border p-4 rounded-md">
+  <div
+    :id="'day' + day"
+    class="border border-brand-100 p-4 rounded-lg flex-grow-0 flex-shrink basis-auto bg-white"
+  >
     <div class="flex flex-col gap-4 justify-between h-full">
-      <span class="text-lg font-bold text-center block mb-4 text-brand-900"
+      <span class="text-2xl font-bold block mb-4 text-brand-900"
         >Day {{ day }}</span
       >
       <Input

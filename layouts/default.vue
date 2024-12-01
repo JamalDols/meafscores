@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-brand-100">
+  <div class="bg-brand-25">
     <AppHeader />
     <div class="py-[120px]">
       <NuxtPage />

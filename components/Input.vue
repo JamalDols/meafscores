@@ -1,92 +1,111 @@
 <template>
   <div class="flex flex-col gap-6">
-    <div class="flex flex-col">
-      <label class="font-medium text-xs text-brand-900 mb-1"
-        >ALT max until day {{ day }}</label
-      >
-      <input
-        :value="gpt"
-        @input="$emit('update:gpt', $event.target.value)"
-        type="number"
-        minlength="1"
-        maxlength="3"
-        class="bg-brand-200 rounded-md py-2 px-2 placeholder-brand-300"
-        :name="'gpt' + day"
-        placeholder="Enter ALT max value"
-      />
-    </div>
-    <div class="flex flex-col">
-      <label class="font-medium text-xs text-brand-900 mb-1"
-        >INR max until day {{ day }}</label
-      >
-      <input
-        :value="inr"
-        @input="$emit('update:inr', $event.target.value)"
-        type="number"
-        minlength="1"
-        maxlength="3"
-        class="bg-brand-200 rounded-md py-2 px-2 placeholder-brand-300"
-        :name="'inr' + day"
-        placeholder="Enter INR max value"
-      />
-    </div>
-
-    <div class="flex">
+    <div class="flex gap-3 justify-between items-center">
+      <!-- ALT Max -->
       <div class="flex flex-col">
-        <label class="font-medium text-xs text-brand-900 mb-1"
-          >Billirrubin day {{ day }}</label
-        >
+        <label class="font-medium text-lg text-brand-900 mb-1">
+          ALT max until day {{ day }}
+        </label>
         <input
-          :value="bbValue"
-          @input="updateBB($event.target.value)"
+          :value="gpt"
+          @input="$emit('update:gpt', $event.target.value)"
           type="number"
           minlength="1"
-          maxlength="5"
-          class="bg-brand-200 rounded-md py-2 px-2 placeholder-brand-300"
-          :name="'bb' + day"
-          :placeholder="bbPlaceholder"
+          maxlength="3"
+          class="bg-brand-50 rounded-md py-2 px-2 text-brand-800 placeholder:!text-brand-300 focus:outline-none focus:outline-brand-500 outline-1 outline-offset-0"
+          :name="'gpt' + day"
+          placeholder="Enter ALT max value"
         />
       </div>
-      <div class="flex flex-col gap-1">
-        <button
-          :class="{
-            'text-xs duration-300 bg-blue-500 text-white': unit === 'mg/dL',
-            'text-xs duration-300 bg-gray-200 text-black': unit !== 'mg/dL',
-          }"
-          @click="convertToMgDl"
-          class="rounded-md py-1 px-2 ml-2"
+      <div>
+        <span class="translate-y-4 block opacity-50 text-brand-900 text-sm"
+          >OR / AND</span
         >
-          mg/dL
-        </button>
-        <button
-          :class="{
-            'text-xs duration-300 bg-blue-500 text-white': unit === 'umol/L',
-            'text-xs duration-300 bg-gray-200 text-black': unit !== 'umol/L',
-          }"
-          @click="convertToUmol"
-          class="rounded-md py-1 px-2 ml-2"
-        >
-          umol/L
-        </button>
+      </div>
+
+      <!-- AST Max -->
+      <div class="flex flex-col">
+        <label class="font-medium text-lg text-brand-900 mb-1">
+          AST max until day {{ day }}
+        </label>
+        <input
+          :value="got"
+          @input="$emit('update:got', $event.target.value)"
+          type="number"
+          minlength="1"
+          maxlength="3"
+          class="bg-brand-50 rounded-md py-2 px-2 text-brand-800 placeholder:!text-brand-300 focus:outline-none focus:outline-brand-500 outline-1 outline-offset-0"
+          :name="'got' + day"
+          placeholder="Enter AST max value"
+        />
       </div>
     </div>
 
-    <div class="flex flex-col">
-      <label class="font-medium text-xs text-brand-900 mb-1"
-        >AST max until day {{ day }}</label
-      >
-      <input
-        :value="got"
-        @input="$emit('update:got', $event.target.value)"
-        type="number"
-        minlength="1"
-        maxlength="3"
-        class="bg-brand-200 rounded-md py-2 px-2 placeholder-brand-300"
-        :name="'got' + day"
-        placeholder="Enter AST max value"
-      />
+    <div class="flex gap-8 justify-between">
+      <!-- Bilirrubina -->
+      <div class="flex gap-4 w-full">
+        <div class="flex flex-col w-full">
+          <label class="font-medium text-lg text-brand-900 mb-1">
+            Bilirubin day {{ day }}
+          </label>
+          <div class="flex items-center gap-2">
+            <input
+              v-model="bilirubin"
+              type="number"
+              minlength="1"
+              maxlength="5"
+              class="bg-brand-50 rounded-md py-2 px-2 text-brand-800 placeholder:!text-brand-300 flex-1 focus:outline-none focus:outline-brand-800"
+              placeholder="Enter bilirubin value"
+            />
+          </div>
+        </div>
+        <div class="flex flex-col">
+          <label class="font-medium text-lg text-brand-900 mb-1"> Unit </label>
+          <div class="flex gap-2">
+            <button
+              @click="setUnit('mg/dL')"
+              :class="{
+                'bg-blue-500 text-white text-xs': unit === 'mg/dL',
+                'bg-gray-200 text-black text-xs': unit !== 'mg/dL',
+              }"
+              class="rounded-md py-2 px-4"
+            >
+              mg/dL
+            </button>
+            <button
+              @click="setUnit('umol/L')"
+              :class="{
+                'bg-blue-500 text-white text-xs': unit === 'umol/L',
+                'bg-gray-200 text-black text-xs': unit !== 'umol/L',
+              }"
+              class="rounded-md py-2 px-4"
+            >
+              umol/L
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex gap-8 justify-between">
+      <!-- INR Max -->
+      <div class="flex flex-col">
+        <label class="font-medium text-lg text-brand-900 mb-1">
+          INR max until day {{ day }}
+        </label>
+        <input
+          :value="inr"
+          @input="$emit('update:inr', $event.target.value)"
+          type="number"
+          minlength="1"
+          maxlength="3"
+          class="bg-brand-50 rounded-md py-2 px-2 text-brand-800 placeholder:!text-brand-300 focus:outline-none focus:outline-brand-500 outline-1 outline-offset-0"
+          :name="'inr' + day"
+          placeholder="Enter INR max value"
+        />
+      </div>
     </div>
 
+    <!-- Add Default Values Button -->
     <div class="flex flex-col">
       <button
         @click="addDefaultValues"
@@ -113,66 +132,64 @@ export default {
       type: [Number, String],
       required: true,
     },
-    bb: {
+    got: {
       type: [Number, String],
       required: true,
     },
-    got: {
+    bb: {
       type: [Number, String],
       required: true,
     },
   },
   data() {
     return {
-      bbValue: this.bb, // Almacenamos el valor tal como es ingresado
-      bbPlaceholder: "BB (umol/L)",
-      unit: "umol/L", // umol/L es la unidad por defecto
+      bilirubin: this.bb, // Valor de bilirrubina inicial
+      unit: "", // Unidad inicial vacía
     };
   },
   methods: {
-    convertToUmol() {
+    setUnit(unit) {
+      this.unit = unit;
+      this.convertUnit();
+    },
+    convertUnit() {
+      // Cambiar entre unidades al seleccionar en el dropdown
       if (this.unit === "mg/dL") {
-        this.bbValue = (parseFloat(this.bbValue) / 0.0113096584483149).toFixed(
-          2
-        );
-        this.unit = "umol/L";
-        this.bbPlaceholder = "BB (umol/L)";
-        this.$emit("update:bb", this.bbValue);
+        // Convertir de umol/L a mg/dL
+        this.bilirubin = this.bilirubin
+          ? (parseFloat(this.bilirubin) / 17.1).toFixed(2)
+          : "";
+      } else if (this.unit === "umol/L") {
+        // Convertir de mg/dL a umol/L
+        this.bilirubin = this.bilirubin
+          ? (parseFloat(this.bilirubin) * 17.1).toFixed(2)
+          : "";
       }
-    },
-    convertToMgDl() {
-      if (this.unit === "umol/L") {
-        this.bbValue = (parseFloat(this.bbValue) * 0.0113096584483149).toFixed(
-          2
-        );
-        this.unit = "mg/dL";
-        this.bbPlaceholder = "BB (mg/dL)";
-        this.$emit("update:bb", this.bbValue);
-      }
-    },
-    updateBB(value) {
-      // Al escribir, solo actualizamos el valor internamente sin convertirlo
-      this.bbValue = value;
-      this.$emit("update:bb", value);
     },
     addDefaultValues() {
-      this.$emit("update:gpt", 123);
-      this.$emit("update:inr", 35);
-      this.bbValue = 50; // umol/L
-      this.$emit("update:bb", this.bbValue.toFixed(2));
-      this.$emit("update:got", 158);
+      // Asignar valores por defecto
+      this.$emit("update:gpt", 123); // ALT
+      this.$emit("update:inr", 35); // INR
+      this.bilirubin = "50"; // Bilirrubina
+      this.unit = "umol/L";
+      if (this.unit === "mg/dL") {
+        this.convertUnit(); // Convertir a la unidad actual
+      }
+      this.$emit("update:bb", this.bilirubin); // Emitir bilirrubina
+      this.$emit("update:got", 158); // AST
     },
   },
   watch: {
     bb(value) {
-      this.bbValue = value; // Actualizamos bbValue si cambia la prop
+      // Si cambia la prop bb desde el padre, sincronizar con el campo
+      this.bilirubin = value;
     },
   },
 };
 </script>
 
 <style scoped>
-input {
-  max-width: 120px;
+input::placeholder {
+  color: var(--brand-300);
 }
 </style>

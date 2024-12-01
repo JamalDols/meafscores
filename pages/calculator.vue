@@ -28,12 +28,12 @@
       <div class="chart-container">
         <ScatterPlot
           :data="chartDataGPT"
-          title="MEAF-GPT"
+          title="MEAF ALT"
           :maxX="Math.max(...visibleDays)"
         />
         <ScatterPlot
           :data="chartDataGOT"
-          title="MEAF-GOT"
+          title="MEAF AST"
           :maxX="Math.max(...visibleDays)"
         />
       </div>
