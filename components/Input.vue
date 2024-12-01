@@ -37,7 +37,7 @@
           >Billirrubin day {{ day }}</label
         >
         <input
-          :value="displayBB"
+          :value="bbValue"
           @input="updateBB($event.target.value)"
           type="number"
           minlength="1"
@@ -124,8 +124,7 @@ export default {
   },
   data() {
     return {
-      originalBB: this.bb, // Almacenamos el valor original
-      displayBB: this.bb, // Valor mostrado en el input
+      bbValue: this.bb, // Almacenamos el valor tal como es ingresado
       bbPlaceholder: "BB (umol/L)",
       unit: "umol/L", // umol/L es la unidad por defecto
     };
@@ -133,43 +132,47 @@ export default {
   methods: {
     convertToUmol() {
       if (this.unit === "mg/dL") {
-        this.displayBB = (parseFloat(this.originalBB) * 17.1).toFixed(2);
+        this.bbValue = (parseFloat(this.bbValue) / 0.0113096584483149).toFixed(
+          2
+        );
         this.unit = "umol/L";
         this.bbPlaceholder = "BB (umol/L)";
+        this.$emit("update:bb", this.bbValue);
       }
     },
     convertToMgDl() {
       if (this.unit === "umol/L") {
-        this.displayBB = (parseFloat(this.originalBB) / 17.1).toFixed(2);
+        this.bbValue = (parseFloat(this.bbValue) * 0.0113096584483149).toFixed(
+          2
+        );
         this.unit = "mg/dL";
         this.bbPlaceholder = "BB (mg/dL)";
+        this.$emit("update:bb", this.bbValue);
       }
     },
     updateBB(value) {
-      this.originalBB = value;
-      this.displayBB = value;
+      // Al escribir, solo actualizamos el valor internamente sin convertirlo
+      this.bbValue = value;
       this.$emit("update:bb", value);
     },
     addDefaultValues() {
       this.$emit("update:gpt", 123);
       this.$emit("update:inr", 35);
-      this.originalBB = 50; // umol/L
-      this.displayBB = this.originalBB;
-      this.$emit("update:bb", this.originalBB.toFixed(2));
+      this.bbValue = 50; // umol/L
+      this.$emit("update:bb", this.bbValue.toFixed(2));
       this.$emit("update:got", 158);
     },
   },
   watch: {
     bb(value) {
-      this.originalBB = value;
-      this.displayBB = value; // Actualizamos displayBB si cambia la prop
+      this.bbValue = value; // Actualizamos bbValue si cambia la prop
     },
   },
 };
 </script>
 
 <style scoped>
-input::placeholder {
-  color: var(--brand-300);
+input {
+  max-width: 120px;
 }
 </style>
