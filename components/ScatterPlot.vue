@@ -54,7 +54,7 @@ export default {
         .range([0, width]);
 
       const y = d3.scaleLinear()
-        .domain([4.3, 5])
+        .domain([0, 10])
         .range([height, 0]);
 
       svg.append("g")
