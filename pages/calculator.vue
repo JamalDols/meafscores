@@ -25,7 +25,7 @@
         Calculate!
       </button>
       <div v-if="error" class="text-red-500">{{ error }}</div>
-      <div class="chart-container">
+      <div class="chart-container flex gap-8">
         <ScatterPlot
           :data="chartDataGPT"
           title="MEAF ALT"
@@ -244,6 +244,5 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
 }
 </style>
