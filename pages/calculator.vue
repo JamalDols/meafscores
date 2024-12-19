@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto grid-cols-12 grid px-4 gap-10">
-    <div class="col-span-12 flex gap-8">
+    <div class="col-span-12 flex gap-4 items-center overflow-scroll">
       <DayInput
         v-for="day in visibleDays"
         :key="day"
@@ -9,22 +9,33 @@
         :calculatedData="calculatedData[day]"
         @update-data="updateData"
       />
-    </div>
-    <div class="col-span-12 flex flex-col items-center">
-      <button
+      <div
         v-if="visibleDays.length < 5"
         @click="addDay"
-        class="bg-brand-500 text-white rounded-sm py-2 px-4 mb-4"
+        class="addDayButton border-2 border-dashed border-brand-100 p-10 rounded-lg flex-grow-0 flex-shrink basis-auto bg-white flex items-center justify-center cursor-pointer duration-300 hover:bg-brand-100 hover:border-brand-200 h-1/2"
       >
-        Add Day
-      </button>
+        <div class="text-center">
+          <span class="block">Add Another Day</span>
+          <span class="block">Click to add calculations for a new day</span>
+          <span class="text-xl font-medium block mb-4 text-brand-900"
+            >Add Day</span
+          >
+        </div>
+      </div>
+    </div>
+    <div class="col-span-12 flex flex-col items-center">
       <button
         @click="calculateAll"
         class="bg-green-500 text-white rounded-lg py-3 px-4 mb-4"
       >
         Calculate!
       </button>
-      <div v-if="error" class="text-red-500">{{ error }}</div>
+      <div
+        v-if="error"
+        class="bg-red-200 text-red-500 rounded-lg py-2 px-4 text-left mb-10 text-sm"
+      >
+        {{ error }}
+      </div>
       <div class="chart-container flex gap-8">
         <ScatterPlot
           :data="chartDataGPT"
@@ -157,8 +168,10 @@ export default {
       if (this.visibleDays.length < 4) {
         const nextDay = this.days[this.visibleDays.length];
         this.visibleDays.push(nextDay);
-      } else {
-        this.error = "You can only add up to 4 days.";
+      }
+      if (this.visibleDays.length === 4) {
+        console.log("hola");
+        document.querySelector(".addDayButton").classList.add("hidden");
       }
     },
     updateData({ day, field, value }) {

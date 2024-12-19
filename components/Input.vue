@@ -3,7 +3,7 @@
     <div class="flex gap-3 justify-between items-center">
       <!-- ALT Max -->
       <div class="flex flex-col">
-        <label class="font-medium text-lg text-brand-900 mb-1">
+        <label class="font-medium text-md text-brand-900 mb-1">
           ALT max until day {{ day }}
         </label>
         <input
@@ -25,7 +25,7 @@
 
       <!-- AST Max -->
       <div class="flex flex-col">
-        <label class="font-medium text-lg text-brand-900 mb-1">
+        <label class="font-medium text-md text-brand-900 mb-1">
           AST max until day {{ day }}
         </label>
         <input
@@ -45,7 +45,7 @@
       <!-- Bilirrubina -->
       <div class="flex gap-4 w-full">
         <div class="flex flex-col w-full">
-          <label class="font-medium text-lg text-brand-900 mb-1">
+          <label class="font-medium text-md text-brand-900 mb-1">
             Bilirubin day {{ day }}
           </label>
           <div class="flex items-center gap-2">
@@ -60,13 +60,15 @@
           </div>
         </div>
         <div class="flex flex-col">
-          <label class="font-medium text-lg text-brand-900 mb-1"> Unit </label>
+          <label class="font-medium text-md text-brand-900 mb-1"> Unit </label>
           <div class="flex gap-2">
             <button
               @click="setUnit('mg/dL')"
               :class="{
-                'bg-blue-500 text-white text-xs': unit === 'mg/dL',
-                'bg-gray-200 text-black text-xs': unit !== 'mg/dL',
+                'bg-brand-500 duration-300 text-white text-xs h-10 pointer-events-none':
+                  unit === 'mg/dL',
+                'bg-slate-200 duration-300 text-black text-xs h-10 hover:bg-slate-300':
+                  unit !== 'mg/dL',
               }"
               class="rounded-md py-2 px-4"
             >
@@ -75,8 +77,10 @@
             <button
               @click="setUnit('umol/L')"
               :class="{
-                'bg-blue-500 text-white text-xs': unit === 'umol/L',
-                'bg-gray-200 text-black text-xs': unit !== 'umol/L',
+                'bg-brand-500 duration-300 text-white text-xs h-10 pointer-events-none':
+                  unit === 'umol/L',
+                'bg-slate-200 duration-300 text-black text-xs h-10 hover:bg-slate-300':
+                  unit !== 'umol/L',
               }"
               class="rounded-md py-2 px-4"
             >
@@ -89,7 +93,7 @@
     <div class="flex gap-8 justify-between">
       <!-- INR Max -->
       <div class="flex flex-col">
-        <label class="font-medium text-lg text-brand-900 mb-1">
+        <label class="font-medium text-md text-brand-900 mb-1">
           INR max until day {{ day }}
         </label>
         <input
@@ -144,13 +148,15 @@ export default {
   data() {
     return {
       bilirubin: this.bb, // Valor de bilirrubina inicial
-      unit: "", // Unidad inicial vacía
+      unit: "mg/dL", // Unidad inicial por defecto
     };
   },
   methods: {
     setUnit(unit) {
-      this.unit = unit;
-      this.convertUnit();
+      if (this.unit !== unit) {
+        this.unit = unit;
+        this.convertUnit();
+      }
     },
     convertUnit() {
       // Cambiar entre unidades al seleccionar en el dropdown
@@ -171,10 +177,8 @@ export default {
       this.$emit("update:gpt", 123); // ALT
       this.$emit("update:inr", 35); // INR
       this.bilirubin = "50"; // Bilirrubina
-      this.unit = "umol/L";
-      if (this.unit === "mg/dL") {
-        this.convertUnit(); // Convertir a la unidad actual
-      }
+      this.unit = "mg/dL"; // Seleccionar mg/dL por defecto
+      this.convertUnit(); // Convertir a la unidad actual
       this.$emit("update:bb", this.bilirubin); // Emitir bilirrubina
       this.$emit("update:got", 158); // AST
     },

@@ -1,41 +1,43 @@
 <template>
-  <div
-    :id="'day' + day"
-    class="border border-brand-100 p-4 rounded-lg flex-grow-0 flex-shrink basis-auto bg-white"
-  >
-    <div class="flex flex-col gap-4 justify-between h-full">
-      <span class="text-2xl font-bold block mb-4 text-brand-900"
-        >Day {{ day }}</span
-      >
-      <Input
-        :day="day"
-        :gpt="gpt"
-        @update:gpt="updateField('gpt', $event)"
-        :inr="inr"
-        @update:inr="updateField('inr', $event)"
-        :bb="bb"
-        @update:bb="updateField('bb', $event)"
-        :got="got"
-        @update:got="updateField('got', $event)"
-      />
-      <div class="flex flex-col gap-2">
-        <div>
-          score ALT: <span>{{ scoreALT }}</span>
-        </div>
-        <div>
-          score INR: <span>{{ scoreINR }}</span>
-        </div>
-        <div>
-          score BB: <span>{{ scoreBB }}</span>
-        </div>
-        <div>
-          score AST: <span>{{ scoreAST }}</span>
-        </div>
-        <div>
-          MEAF-ALT {{ day }}DPO: <span>{{ meafALT }}</span>
-        </div>
-        <div>
-          MEAF-AST {{ day }}DPO: <span>{{ meafAST }}</span>
+  <div class="">
+    <span class="text-2xl font-bold block mb-2 text-brand-900"
+      >Day {{ day }}</span
+    >
+    <div
+      :id="'day' + day"
+      class="border border-brand-100 p-4 rounded-lg flex-grow-0 flex-shrink basis-auto bg-white"
+    >
+      <div class="flex flex-col gap-4 justify-between h-full">
+        <Input
+          :day="day"
+          :gpt="gpt"
+          @update:gpt="updateField('gpt', $event)"
+          :inr="inr"
+          @update:inr="updateField('inr', $event)"
+          :bb="bb"
+          @update:bb="updateField('bb', $event)"
+          :got="got"
+          @update:got="updateField('got', $event)"
+        />
+        <div class="flex flex-col gap-2">
+          <div>
+            score ALT: <span>{{ scoreALT }}</span>
+          </div>
+          <div>
+            score INR: <span>{{ scoreINR }}</span>
+          </div>
+          <div>
+            score BB: <span>{{ scoreBB }}</span>
+          </div>
+          <div>
+            score AST: <span>{{ scoreAST }}</span>
+          </div>
+          <div>
+            MEAF-ALT {{ day }}DPO: <span>{{ meafALT }}</span>
+          </div>
+          <div>
+            MEAF-AST {{ day }}DPO: <span>{{ meafAST }}</span>
+          </div>
         </div>
       </div>
     </div>
