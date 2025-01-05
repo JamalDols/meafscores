@@ -181,9 +181,18 @@ export default {
       if (this.visibleDays.length < 4) {
         const nextDay = this.days[this.visibleDays.length];
         this.visibleDays.push(nextDay);
+        this.$nextTick(() => {
+          const newDayElement = document.querySelector(`#day${nextDay}`);
+          if (newDayElement) {
+            newDayElement.style.transition = "opacity 0.8s";
+            newDayElement.style.opacity = 0;
+            setTimeout(() => {
+              newDayElement.style.opacity = 1;
+            }, 0);
+          }
+        });
       }
       if (this.visibleDays.length === 4) {
-        console.log("hola");
         document.querySelector(".addDayButton").classList.add("hidden");
       }
     },
