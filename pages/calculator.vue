@@ -1,6 +1,18 @@
 <template>
   <div class="container mx-auto grid-cols-12 grid px-4 gap-10">
-    <div class="col-span-12 flex gap-4 items-center overflow-scroll">
+    <div
+      v-for="(day, index) in visibleDays"
+      :key="index"
+      class="p-6 border-b text-sm"
+      @click="scrollToDay(day)"
+    >
+      Day {{ day }}
+    </div>
+    <div
+      class="col-span-12 flex gap-4 items-center overflow-scroll"
+      id="DayInputWrapper"
+      ref="dayInputWrapper"
+    >
       <DayInput
         v-for="day in visibleDays"
         :key="day"
@@ -8,11 +20,12 @@
         :constants="constants['DPO' + day]"
         :calculatedData="calculatedData[day]"
         @update-data="updateData"
+        @add-day-cloned="handleAddDayCloned"
       />
       <div
         v-if="visibleDays.length < 5"
         @click="addDay"
-        class="addDayButton border-2 border-dashed border-brand-100 p-10 rounded-lg flex-grow-0 flex-shrink basis-auto bg-white flex items-center justify-center cursor-pointer duration-300 hover:bg-brand-100 hover:border-brand-200 h-1/2"
+        class="addDayButton h-[1px] w-[1px] overflow-hidden p-0 fixed top-0 right-0"
       >
         <div class="text-center">
           <span class="block">Add Another Day</span>
@@ -233,6 +246,32 @@ export default {
           this.chartDataGOT.push({ x: day, y: meafAST });
         } else {
           this.error = `Faltan datos para el día ${day}`;
+        }
+      });
+    },
+    handleAddDayCloned(event) {
+      this.addDay();
+      event.target.remove();
+      const clonedText = document.querySelector(".addDayClonedText");
+      if (clonedText) {
+        clonedText.remove();
+      }
+    },
+    //TODO: Hacer que esto funcione
+    scrollToDay(day) {
+      this.$nextTick(() => {
+        console.log("scrolling to day", day);
+        const dayInputWrapper = this.$refs.dayInputWrapper;
+
+        const dayInput = document.getElementById("day" + this.day);
+
+        if (dayInputWrapper && dayInput) {
+          console.log(`dayInputWrapper`, dayInputWrapper);
+          dayInputWrapper.scrollLeft = dayInputWrapper.scrollWidth;
+          const dayInputWidth = dayInput.offsetWidth;
+          const gap =
+            parseInt(window.getComputedStyle(dayInputWrapper).gap) || 0;
+          dayInputWrapper.scrollLeft += dayInputWidth + gap;
         }
       });
     },

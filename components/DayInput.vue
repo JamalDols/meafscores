@@ -19,6 +19,18 @@
           :got="got"
           @update:got="updateField('got', $event)"
         />
+        <div class="">
+          <button
+            v-if="day < 5"
+            @click="handleAddDayCloned"
+            class="addDayCloned bg-green-500 text-white rounded-lg py-3 px-4 mb-4"
+          >
+            Add day cloned
+          </button>
+          <span v-if="day === 2" class="addDayClonedText"
+            >Click to add calculations for a new day</span
+          >
+        </div>
         <div class="flex flex-col gap-2">
           <div>
             score ALT: <span>{{ scoreALT }}</span>
@@ -104,6 +116,22 @@ export default {
     updateField(field, value) {
       this[field] = value;
       this.$emit("update-data", { day: this.day, field, value });
+    },
+    handleAddDayCloned(event) {
+      this.clickCount++;
+      this.$emit("add-day-cloned", event);
+
+      this.$nextTick(() => {
+        const dayInputWrapper = this.$parent.$refs.dayInputWrapper;
+        const dayInput = document.getElementById("day" + this.day);
+        if (dayInputWrapper && dayInput) {
+          dayInputWrapper.scrollLeft = dayInputWrapper.scrollWidth;
+          const dayInputWidth = dayInput.offsetWidth;
+          const gap =
+            parseInt(window.getComputedStyle(dayInputWrapper).gap) || 0;
+          dayInputWrapper.scrollLeft += dayInputWidth + gap;
+        }
+      });
     },
   },
 };
