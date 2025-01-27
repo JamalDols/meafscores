@@ -5,7 +5,7 @@
     >
     <div
       :id="'day' + day"
-      class="border border-brand-100 p-4 rounded-lg flex-grow-0 flex-shrink basis-auto bg-white"
+      class="py-4 rounded-lg flex-grow-0 flex-shrink basis-auto"
     >
       <div class="flex flex-col gap-4 justify-between h-full">
         <Input
@@ -19,19 +19,20 @@
           :got="got"
           @update:got="updateField('got', $event)"
         />
-        <div class="">
+        <div class="flex gap-1.5 items-center">
           <button
             v-if="day < 5"
             @click="handleAddDayCloned"
-            class="addDayCloned bg-green-500 text-white rounded-lg py-3 px-4 mb-4"
+            class="addDayCloned bg-[#0086CF] text-white rounded-xl text-base py-2 px-4"
+            data-AddDay
           >
-            Add day cloned
+            Add day
           </button>
-          <span v-if="day === 2" class="addDayClonedText"
+          <span v-if="day === 2" class="addDayClonedText text-xs text-[#73868F]"
             >Click to add calculations for a new day</span
           >
         </div>
-        <div class="flex flex-col gap-2">
+        <!-- <div class="flex flex-col gap-2">
           <div>
             score ALT: <span>{{ scoreALT }}</span>
           </div>
@@ -50,7 +51,7 @@
           <div>
             MEAF-AST {{ day }}DPO: <span>{{ meafAST }}</span>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

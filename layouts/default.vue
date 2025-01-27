@@ -1,5 +1,12 @@
 <template>
-  <div class="bg-brand-25">
+  <div class="">
+    <div
+      class="h-full w-full fixed top-0 left-0 z-0"
+      style="
+        background: linear-gradient(180deg, #fbfdfd 0%, #badff3 100%);
+        z-index: -1;
+      "
+    ></div>
     <AppHeader />
     <div class="py-[120px]">
       <NuxtPage />

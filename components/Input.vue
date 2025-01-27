@@ -1,9 +1,9 @@
 <template>
-  <div class="flex flex-col gap-6">
+  <div class="flex flex-col gap-6 relative">
     <div class="flex gap-3 justify-between items-center">
       <!-- ALT Max -->
       <div class="flex flex-col">
-        <label class="font-medium text-md text-brand-900 mb-1">
+        <label class="font-medium text-md text-[#23363C] mb-1">
           ALT max until day {{ day }}
         </label>
         <input
@@ -12,20 +12,20 @@
           type="number"
           minlength="1"
           maxlength="3"
-          class="bg-brand-50 rounded-md py-2 px-2 text-brand-800 placeholder:!text-brand-300 focus:outline-none focus:outline-brand-500 outline-1 outline-offset-0"
+          class="bg-[#F8FCFD] rounded-md py-2 px-2 text-brand-800 placeholder:!text-[#9DA7AA] focus:outline-none focus:outline-brand-500 outline-1 outline-offset-0"
           :name="'gpt' + day"
           placeholder="Enter ALT max value"
         />
       </div>
       <div>
-        <span class="translate-y-4 block opacity-50 text-brand-900 text-sm"
+        <span class="translate-y-4 block opacity-50 text-[#23363C] text-sm"
           >OR / AND</span
         >
       </div>
 
       <!-- AST Max -->
       <div class="flex flex-col">
-        <label class="font-medium text-md text-brand-900 mb-1">
+        <label class="font-medium text-md text-[#23363C] mb-1">
           AST max until day {{ day }}
         </label>
         <input
@@ -34,7 +34,7 @@
           type="number"
           minlength="1"
           maxlength="3"
-          class="bg-brand-50 rounded-md py-2 px-2 text-brand-800 placeholder:!text-brand-300 focus:outline-none focus:outline-brand-500 outline-1 outline-offset-0"
+          class="bg-[#F8FCFD] rounded-md py-2 px-2 text-brand-800 placeholder:!text-[#9DA7AA] focus:outline-none focus:outline-brand-500 outline-1 outline-offset-0"
           :name="'got' + day"
           placeholder="Enter AST max value"
         />
@@ -45,7 +45,7 @@
       <!-- Bilirrubina -->
       <div class="flex gap-4 w-full">
         <div class="flex flex-col w-full">
-          <label class="font-medium text-md text-brand-900 mb-1">
+          <label class="font-medium text-md text-[#23363C] mb-1">
             Bilirubin day {{ day }}
           </label>
           <div class="flex items-center gap-2">
@@ -54,20 +54,20 @@
               type="number"
               minlength="1"
               maxlength="5"
-              class="bg-brand-50 rounded-md py-2 px-2 text-brand-800 placeholder:!text-brand-300 flex-1 focus:outline-none focus:outline-brand-800"
+              class="bg-[#F8FCFD] rounded-md py-2 px-2 text-brand-800 placeholder:!text-[#9DA7AA] flex-1 focus:outline-none focus:outline-brand-800"
               placeholder="Enter bilirubin value"
             />
           </div>
         </div>
         <div class="flex flex-col">
-          <label class="font-medium text-md text-brand-900 mb-1"> Unit </label>
+          <label class="font-medium text-md text-[#23363C] mb-1"> Unit </label>
           <div class="flex gap-2">
             <button
               @click="setUnit('mg/dL')"
               :class="{
-                'bg-brand-500 duration-300 text-white text-xs h-10 pointer-events-none':
+                'bg-[#0086CF] duration-300 text-white text-xs h-10 pointer-events-none':
                   unit === 'mg/dL',
-                'bg-slate-200 duration-300 text-black text-xs h-10 hover:bg-slate-300':
+                'bg-[#9CB7C5] duration-300 text-black text-xs h-10 hover:bg-[#07A8FF] hover:text-white':
                   unit !== 'mg/dL',
               }"
               class="rounded-md py-2 px-4"
@@ -77,9 +77,9 @@
             <button
               @click="setUnit('umol/L')"
               :class="{
-                'bg-brand-500 duration-300 text-white text-xs h-10 pointer-events-none':
+                'bg-[#0086CF] duration-300 text-white text-xs h-10 pointer-events-none':
                   unit === 'umol/L',
-                'bg-slate-200 duration-300 text-black text-xs h-10 hover:bg-slate-300':
+                'bg-[#9CB7C5] duration-300 text-black text-xs h-10 hover:bg-[#07A8FF] hover:text-white':
                   unit !== 'umol/L',
               }"
               class="rounded-md py-2 px-4"
@@ -93,7 +93,7 @@
     <div class="flex gap-8 justify-between">
       <!-- INR Max -->
       <div class="flex flex-col">
-        <label class="font-medium text-md text-brand-900 mb-1">
+        <label class="font-medium text-md text-[#23363C] mb-1">
           INR max until day {{ day }}
         </label>
         <input
@@ -102,7 +102,7 @@
           type="number"
           minlength="1"
           maxlength="3"
-          class="bg-brand-50 rounded-md py-2 px-2 text-brand-800 placeholder:!text-brand-300 focus:outline-none focus:outline-brand-500 outline-1 outline-offset-0"
+          class="bg-[#F8FCFD] rounded-md py-2 px-2 text-brand-800 placeholder:!text-[#9DA7AA] focus:outline-none focus:outline-brand-500 outline-1 outline-offset-0"
           :name="'inr' + day"
           placeholder="Enter INR max value"
         />
@@ -110,10 +110,11 @@
     </div>
 
     <!-- Add Default Values Button -->
-    <div class="flex flex-col">
+    <div class="flex flex-col absolute">
       <button
         @click="addDefaultValues"
-        class="bg-green-500 text-white rounded-sm py-2 px-4 mt-4"
+        class="bg-green-500 text-white rounded-sm py-0 px-0 absolute w-[1px] h-[1px] overflow-hidden"
+        data-AddDefaultValues
       >
         Add Default Values
       </button>

@@ -1,15 +1,17 @@
 <template>
   <div class="container mx-auto grid-cols-12 grid px-4 gap-10">
-    <div
-      v-for="(day, index) in visibleDays"
-      :key="index"
-      class="p-6 border-b text-sm"
-      @click="scrollToDay(day)"
-    >
-      Day {{ day }}
+    <div class="col-span-12 flex justify-center text-[#0086CF]">
+      <div
+        v-for="(day, index) in visibleDays"
+        :key="index"
+        class="p-6 border-b text-sm text-nowrap border-[#0086CF] cursor-pointer opacity-40 hover:opacity-100 duration-300 relative after:content-[''] after:absolute after:w-full after:h-[1px] after:bg-[#0086CF] after:bottom-0 after:left-0 after:opacity-0 after:transition-opacity-300 hover:after:opacity-100"
+        @click="scrollToDay(day)"
+      >
+        Day {{ day }}
+      </div>
     </div>
     <div
-      class="col-span-12 flex gap-4 items-center overflow-scroll"
+      class="col-span-12 flex gap-4 items-start overflow-scroll"
       id="DayInputWrapper"
       ref="dayInputWrapper"
     >
@@ -39,7 +41,7 @@
     <div class="col-span-12 flex flex-col items-center">
       <button
         @click="calculateAll"
-        class="bg-green-500 text-white rounded-lg py-3 px-4 mb-4"
+        class="bg-[#0086CF] text-2xl text-white rounded-lg py-3 px-4 mb-12"
       >
         Calculate!
       </button>
@@ -49,6 +51,50 @@
       >
         {{ error }}
       </div>
+
+      <section id="resultsWrapper" class="flex gap-6 hidden">
+        <div>
+          <div class="title font-medium text-[#65747B] text-2xl">MEAF ALT</div>
+          <div
+            class="bg-white rounded-xl flex gap-12 justify-between py-4 px-3 mt-6 mb-12"
+          >
+            <div
+              v-for="day in visibleDays"
+              :key="day"
+              class="flex flex-col items-center relative after:content-[''] after:absolute after:h-16 after:w-[1px] after:bg-[#9ACFEC] after:-right-6 after:last:hidden"
+            >
+              <span class="text-base text-[#4E5E63]">
+                {{ day }}<span v-if="day === 2">nd</span
+                ><span v-else-if="day === 3">rd</span><span v-else>th</span> POD
+              </span>
+
+              <span class="text-3xl text-[#1B2428] font-semibold">{{
+                calculatedData[day].meafALT
+              }}</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="title font-medium text-[#65747B] text-2xl">MEAF AST</div>
+          <div
+            class="bg-white rounded-xl flex gap-12 justify-between py-4 px-3 mt-6 mb-12"
+          >
+            <div
+              v-for="day in visibleDays"
+              :key="day"
+              class="flex flex-col items-center relative after:content-[''] after:absolute after:h-16 after:w-[1px] after:bg-[#9ACFEC] after:-right-6 after:last:hidden"
+            >
+              <span class="text-base text-[#4E5E63]">
+                {{ day }}<span v-if="day === 2">nd</span
+                ><span v-else-if="day === 3">rd</span><span v-else>th</span> POD
+              </span>
+              <span class="text-3xl text-[#1B2428] font-semibold">{{
+                calculatedData[day].meafAST
+              }}</span>
+            </div>
+          </div>
+        </div>
+      </section>
       <div class="chart-container flex gap-8">
         <ScatterPlot
           :data="chartDataGPT"
@@ -62,6 +108,20 @@
         />
       </div>
     </div>
+  </div>
+  <div class="fixed top-0 right-0 opacity-45">
+    <button
+      @click="clickAddDayButtons"
+      class="bg-blue-500 text-white rounded-lg py-3 px-4 mb-4"
+    >
+      Add Day 5 Times
+    </button>
+    <button
+      @click="clickAddDefaultValuesButtons"
+      class="bg-red-500 text-white rounded-lg py-3 px-4 mb-4"
+    >
+      Add Default Values 5 Times
+    </button>
   </div>
 </template>
 
@@ -212,35 +272,44 @@ export default {
         if (dayData && this.isComplete(dayData)) {
           const { gpt, inr, bb, got } = dayData;
           const constants = this.constants["DPO" + day];
-          const gptScore = this.calculateScore(
-            gpt,
-            constants.gptB,
-            constants.gptD,
-            constants.gptE
-          );
-          const inrScore = this.calculateScore(
-            inr,
-            constants.inrB,
-            constants.inrD,
-            constants.inrE
-          );
-          const bbScore = this.calculateScore(
-            bb,
-            constants.bbB,
-            constants.bbD,
-            constants.bbE
-          );
-          const gotScore = this.calculateScore(
-            got,
-            constants.gotB,
-            constants.gotD,
-            constants.gotE
-          );
+          const gptScore = Number(
+            this.calculateScore(
+              gpt,
+              constants.gptB,
+              constants.gptD,
+              constants.gptE
+            )
+          ).toFixed(2);
+          const inrScore = Number(
+            this.calculateScore(
+              inr,
+              constants.inrB,
+              constants.inrD,
+              constants.inrE
+            )
+          ).toFixed(2);
+          const bbScore = Number(
+            this.calculateScore(bb, constants.bbB, constants.bbD, constants.bbE)
+          ).toFixed(2);
+          const gotScore = Number(
+            this.calculateScore(
+              got,
+              constants.gotB,
+              constants.gotD,
+              constants.gotE
+            )
+          ).toFixed(2);
 
-          const meafALT =
-            parseFloat(gptScore) + parseFloat(inrScore) + parseFloat(bbScore);
-          const meafAST =
-            parseFloat(inrScore) + parseFloat(bbScore) + parseFloat(gotScore);
+          const meafALT = (
+            parseFloat(gptScore) +
+            parseFloat(inrScore) +
+            parseFloat(bbScore)
+          ).toFixed(2);
+          const meafAST = (
+            parseFloat(inrScore) +
+            parseFloat(bbScore) +
+            parseFloat(gotScore)
+          ).toFixed(2);
 
           this.calculatedData[day] = {
             scoreALT: gptScore,
@@ -251,8 +320,9 @@ export default {
             meafAST,
           };
 
-          this.chartDataGPT.push({ x: day, y: meafALT });
-          this.chartDataGOT.push({ x: day, y: meafAST });
+          this.chartDataGPT.push({ x: day, y: parseFloat(meafALT) });
+          this.chartDataGOT.push({ x: day, y: parseFloat(meafAST) });
+          document.getElementById("resultsWrapper").classList.remove("hidden");
         } else {
           this.error = `Faltan datos para el día ${day}`;
         }
@@ -293,6 +363,26 @@ export default {
       }
       const score = D / (1 + Math.exp(B * (Math.log(value) - Math.log(E))));
       return score.toFixed(3);
+    },
+
+    clickAddDayButtons() {
+      const buttons = document.querySelectorAll("[data-addday]");
+      this.clickButtonsSequentially(buttons, 5);
+    },
+    clickAddDefaultValuesButtons() {
+      const buttons = document.querySelectorAll("[data-adddefaultvalues]");
+      this.clickButtonsSequentially(buttons, 5);
+    },
+    clickButtonsSequentially(buttons, times) {
+      let count = 0;
+      const interval = setInterval(() => {
+        if (count < times && count < buttons.length) {
+          buttons[count].click();
+          count++;
+        } else {
+          clearInterval(interval);
+        }
+      }, 100);
     },
   },
 };
