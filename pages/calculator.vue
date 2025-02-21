@@ -10,11 +10,7 @@
         Day {{ day }}
       </div>
     </div>
-    <div
-      class="col-span-12 flex gap-4 items-start overflow-scroll"
-      id="DayInputWrapper"
-      ref="dayInputWrapper"
-    >
+    <div class="col-span-12 flex gap-4 items-start overflow-scroll" id="DayInputWrapper" ref="dayInputWrapper">
       <DayInput
         v-for="day in visibleDays"
         :key="day"
@@ -24,104 +20,58 @@
         @update-data="updateData"
         @add-day-cloned="handleAddDayCloned"
       />
-      <div
-        v-if="visibleDays.length < 5"
-        @click="addDay"
-        class="addDayButton h-[1px] w-[1px] overflow-hidden p-0 fixed top-0 right-0"
-      >
+      <div v-if="visibleDays.length < 5" @click="addDay" class="addDayButton h-[1px] w-[1px] overflow-hidden p-0 fixed top-0 right-0">
         <div class="text-center">
           <span class="block">Add Another Day</span>
           <span class="block">Click to add calculations for a new day</span>
-          <span class="text-xl font-medium block mb-4 text-brand-900"
-            >Add Day</span
-          >
+          <span class="text-xl font-medium block mb-4 text-brand-900">Add Day</span>
         </div>
       </div>
     </div>
     <div class="col-span-12 flex flex-col items-center">
-      <button
-        @click="calculateAll"
-        class="bg-[#0086CF] text-2xl text-white rounded-lg py-3 px-4 mb-12"
-      >
-        Calculate!
-      </button>
-      <div
-        v-if="error"
-        class="bg-red-200 text-red-500 rounded-lg py-2 px-4 text-left mb-10 text-sm"
-      >
+      <button @click="calculateAll" class="bg-[#0086CF] text-2xl text-white rounded-lg py-3 px-4 mb-12">Calculate!</button>
+      <div v-if="error" class="bg-red-200 text-red-500 rounded-lg py-2 px-4 text-left mb-10 text-sm">
         {{ error }}
       </div>
 
       <section id="resultsWrapper" class="flex gap-6 hidden">
         <div>
           <div class="title font-medium text-[#65747B] text-2xl">MEAF ALT</div>
-          <div
-            class="bg-white rounded-xl flex gap-12 justify-between py-4 px-3 mt-6 mb-12"
-          >
+          <div class="bg-white rounded-xl flex gap-12 justify-between py-4 px-3 mt-6 mb-12">
             <div
               v-for="day in visibleDays"
               :key="day"
               class="flex flex-col items-center relative after:content-[''] after:absolute after:h-16 after:w-[1px] after:bg-[#9ACFEC] after:-right-6 after:last:hidden"
             >
-              <span class="text-base text-[#4E5E63]">
-                {{ day }}<span v-if="day === 2">nd</span
-                ><span v-else-if="day === 3">rd</span><span v-else>th</span> POD
-              </span>
+              <span class="text-base text-[#4E5E63]"> {{ day }}<span v-if="day === 2">nd</span><span v-else-if="day === 3">rd</span><span v-else>th</span> POD </span>
 
-              <span class="text-3xl text-[#1B2428] font-semibold">{{
-                calculatedData[day].meafALT
-              }}</span>
+              <span class="text-3xl text-[#1B2428] font-semibold">{{ calculatedData[day].meafALT }}</span>
             </div>
           </div>
         </div>
         <div>
           <div class="title font-medium text-[#65747B] text-2xl">MEAF AST</div>
-          <div
-            class="bg-white rounded-xl flex gap-12 justify-between py-4 px-3 mt-6 mb-12"
-          >
+          <div class="bg-white rounded-xl flex gap-12 justify-between py-4 px-3 mt-6 mb-12">
             <div
               v-for="day in visibleDays"
               :key="day"
               class="flex flex-col items-center relative after:content-[''] after:absolute after:h-16 after:w-[1px] after:bg-[#9ACFEC] after:-right-6 after:last:hidden"
             >
-              <span class="text-base text-[#4E5E63]">
-                {{ day }}<span v-if="day === 2">nd</span
-                ><span v-else-if="day === 3">rd</span><span v-else>th</span> POD
-              </span>
-              <span class="text-3xl text-[#1B2428] font-semibold">{{
-                calculatedData[day].meafAST
-              }}</span>
+              <span class="text-base text-[#4E5E63]"> {{ day }}<span v-if="day === 2">nd</span><span v-else-if="day === 3">rd</span><span v-else>th</span> POD </span>
+              <span class="text-3xl text-[#1B2428] font-semibold">{{ calculatedData[day].meafAST }}</span>
             </div>
           </div>
         </div>
       </section>
       <div class="chart-container flex gap-8">
-        <ScatterPlot
-          :data="chartDataGPT"
-          title="MEAF ALT"
-          :maxX="Math.max(...visibleDays)"
-        />
-        <ScatterPlot
-          :data="chartDataGOT"
-          title="MEAF AST"
-          :maxX="Math.max(...visibleDays)"
-        />
+        <ScatterPlot :data="chartDataGPT" title="MEAF ALT" :maxX="Math.max(...visibleDays)" />
+        <ScatterPlot :data="chartDataGOT" title="MEAF AST" :maxX="Math.max(...visibleDays)" />
       </div>
     </div>
   </div>
   <div class="fixed top-0 right-0 opacity-45">
-    <button
-      @click="clickAddDayButtons"
-      class="bg-blue-500 text-white rounded-lg py-3 px-4 mb-4"
-    >
-      Add Day 5 Times
-    </button>
-    <button
-      @click="clickAddDefaultValuesButtons"
-      class="bg-red-500 text-white rounded-lg py-3 px-4 mb-4"
-    >
-      Add Default Values 5 Times
-    </button>
+    <button @click="clickAddDayButtons" class="bg-blue-500 text-white rounded-lg py-3 px-4 mb-4">Add Day 5 Times</button>
+    <button @click="clickAddDefaultValuesButtons" class="bg-red-500 text-white rounded-lg py-3 px-4 mb-4">Add Default Values 5 Times</button>
   </div>
 </template>
 
@@ -138,6 +88,9 @@ export default {
     return {
       days: [2, 3, 4, 5],
       visibleDays: [2], // Inicialmente solo mostrar el día 2
+      calculatedData: {},
+      chartDataGPT: [],
+      chartDataGOT: [],
       constants: {
         DPO2: {
           gptB: -2.0125491,
@@ -272,44 +225,13 @@ export default {
         if (dayData && this.isComplete(dayData)) {
           const { gpt, inr, bb, got } = dayData;
           const constants = this.constants["DPO" + day];
-          const gptScore = Number(
-            this.calculateScore(
-              gpt,
-              constants.gptB,
-              constants.gptD,
-              constants.gptE
-            )
-          ).toFixed(2);
-          const inrScore = Number(
-            this.calculateScore(
-              inr,
-              constants.inrB,
-              constants.inrD,
-              constants.inrE
-            )
-          ).toFixed(2);
-          const bbScore = Number(
-            this.calculateScore(bb, constants.bbB, constants.bbD, constants.bbE)
-          ).toFixed(2);
-          const gotScore = Number(
-            this.calculateScore(
-              got,
-              constants.gotB,
-              constants.gotD,
-              constants.gotE
-            )
-          ).toFixed(2);
+          const gptScore = Number(this.calculateScore(gpt, constants.gptB, constants.gptD, constants.gptE)).toFixed(2);
+          const inrScore = Number(this.calculateScore(inr, constants.inrB, constants.inrD, constants.inrE)).toFixed(2);
+          const bbScore = Number(this.calculateScore(bb, constants.bbB, constants.bbD, constants.bbE)).toFixed(2);
+          const gotScore = Number(this.calculateScore(got, constants.gotB, constants.gotD, constants.gotE)).toFixed(2);
 
-          const meafALT = (
-            parseFloat(gptScore) +
-            parseFloat(inrScore) +
-            parseFloat(bbScore)
-          ).toFixed(2);
-          const meafAST = (
-            parseFloat(inrScore) +
-            parseFloat(bbScore) +
-            parseFloat(gotScore)
-          ).toFixed(2);
+          const meafALT = (parseFloat(gptScore) + parseFloat(inrScore) + parseFloat(bbScore)).toFixed(2);
+          const meafAST = (parseFloat(inrScore) + parseFloat(bbScore) + parseFloat(gotScore)).toFixed(2);
 
           this.calculatedData[day] = {
             scoreALT: gptScore,
@@ -348,8 +270,7 @@ export default {
           console.log(`dayInputWrapper`, dayInputWrapper);
           dayInputWrapper.scrollLeft = dayInputWrapper.scrollWidth;
           const dayInputWidth = dayInput.offsetWidth;
-          const gap =
-            parseInt(window.getComputedStyle(dayInputWrapper).gap) || 0;
+          const gap = parseInt(window.getComputedStyle(dayInputWrapper).gap) || 0;
           dayInputWrapper.scrollLeft += dayInputWidth + gap;
         }
       });
