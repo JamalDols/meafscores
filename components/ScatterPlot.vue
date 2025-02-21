@@ -1,5 +1,5 @@
 <template>
-  <div ref="chart" class="chart bg-brand-100 p-4 rounded-xl"></div>
+  <div ref="chart" class="chart bg-white p-4 rounded-xl"></div>
 </template>
 
 <script>
@@ -42,13 +42,16 @@ export default {
 
       d3.select(this.$refs.chart).selectAll("*").remove();
 
-      const svg = d3
-        .select(this.$refs.chart)
-        .append("svg")
-        .attr("width", containerWidth)
-        .attr("height", containerHeight)
-        .append("g")
-        .attr("transform", `translate(${margin.left},${margin.top})`);
+      const svg = d3.select(this.$refs.chart).append("svg").attr("width", containerWidth).attr("height", containerHeight).append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+      // Definir el degradado
+      const defs = svg.append("defs");
+
+      const gradient = defs.append("linearGradient").attr("id", "area-gradient").attr("x1", "0%").attr("y1", "0%").attr("x2", "0%").attr("y2", "100%");
+
+      gradient.append("stop").attr("offset", "0%").attr("stop-color", "rgba(162,211,237, 0.8)").attr("stop-opacity", 1);
+
+      gradient.append("stop").attr("offset", "100%").attr("stop-color", "rgba(162,211,237, 0.2)").attr("stop-opacity", 0);
 
       // Escala x que empieza en el día 2
       const x = d3.scaleLinear().domain([2, this.maxX]).range([0, width]);
@@ -75,7 +78,6 @@ export default {
         .attr("text-anchor", "middle")
         .attr("x", width / 2)
         .attr("y", height + margin.top + 10)
-        .text("Days after liver transplantation")
         .attr("class", "text-red-500");
 
       svg
@@ -100,11 +102,11 @@ export default {
         .y1((d) => y(d.y))
         .curve(d3.curveBasis);
 
-      // Área sombreada
+      // Área sombreada con degradado
       svg
         .append("path")
         .datum(this.data)
-        .attr("fill", "rgba(105, 179, 162, 0.2)") // Color del área
+        .attr("fill", "url(#area-gradient)") // Usar el degradado
         .attr("d", area);
 
       // Línea
@@ -112,7 +114,7 @@ export default {
         .append("path")
         .datum(this.data)
         .attr("fill", "none")
-        .attr("stroke", "#69b3a2") // Color de la línea
+        .attr("stroke", "#0086CF") // Color de la línea
         .attr("stroke-width", 2)
         .attr("d", line);
 
@@ -125,7 +127,7 @@ export default {
         .attr("cx", (d) => x(d.x))
         .attr("cy", (d) => y(d.y))
         .attr("r", 5)
-        .style("fill", "#69b3a2");
+        .style("fill", "#0086CF");
     },
   },
   watch: {
